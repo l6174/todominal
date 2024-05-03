@@ -1,6 +1,7 @@
 # Todominal
 Minimal todo list for terminal.
-![](Assets/todominal.png)
+
+![](preview.png)
 
 ## Dependencies
 1. figlet
