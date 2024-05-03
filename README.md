@@ -7,6 +7,14 @@ Minimal todo list for terminal.
 1. figlet
 2. gcc
 
+## Installation
+### Arch Linux
+```
+$ git clone https://github.com/l6174/todominal.git
+$ cd todominal
+$ makepkg -si
+```
+
 ## Build from Source
 ```
 $ git clone https://github.com/l6174/todominal.git
