@@ -112,7 +112,7 @@ string strikethrough(const string& text)
 // Function to remove a todo
 void removeTodo() {
     string toRemove;
-    cout << "Enter Todo to Remove: ";
+    cout << "Enter Todo Index to Remove: ";
     cin >> toRemove;
     int toRemoveint = stoi(toRemove);
     removeLine(mainFile, toRemoveint);
@@ -121,7 +121,7 @@ void removeTodo() {
 // Function to mark a todo as done
 void markDone() {
     string markInput;
-    cout << "Enter line number to mark as done: ";
+    cout << "Enter Todo Index to Mark as Done: ";
     cin >> markInput;
     int markNum = stoi(markInput);
     replaceLine(mainFile, markNum, strikethrough(getLineContent(mainFile, markNum)));
@@ -132,7 +132,7 @@ void addTodo() {
     string newTodo;
 
     // Get New Todo Input
-    cout << "Enter new todo name: ";
+    cout << "Enter New Todo Name: ";
     cin.ignore(); // Clear any remaining newline characters in the buffer
     getline(cin, newTodo); // Read entire line including spaces
 
@@ -150,6 +150,7 @@ int main() {
     // Input Variables
     string userInput;
     string otherInput;
+    string eraseConfirmation;
     
     // Main Loop
     bool run = true;
@@ -191,8 +192,13 @@ int main() {
             cin >> otherInput;
             if (otherInput == "1")
             {
-                ofstream toErase(mainFile, ofstream::out | ofstream::trunc);
-                toErase.close();
+                cout << "Are you sure? (Y/N): ";
+                std::cin >> eraseConfirmation;
+                if (eraseConfirmation == "y" || eraseConfirmation == "Y") {
+                    ofstream toErase(mainFile, ofstream::out | ofstream::trunc);
+                    toErase.close();
+                }
+                else {};
             }
             else if (otherInput == "E" || otherInput == "e"){} //Exit
             else
@@ -201,7 +207,8 @@ int main() {
                 this_thread::sleep_for(chrono::seconds(1));
             }
         } else if (userInput == "E" || userInput == "e") {
-            break;
+            system("clear");
+            exit(0);
         } else {
             cerr << "Enter a valid response!";
             this_thread::sleep_for(chrono::seconds(1));
