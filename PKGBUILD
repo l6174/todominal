@@ -8,7 +8,7 @@ arch=('any')
 url="https://github.com/l6174/todominal"
 OPTIONS=(strip !debug)
 license=('GPL')
-depends=('figlet' 'gcc')
+depends=('figlet' 'gcc' 'sed')
 
 source=("git+https://github.com/l6174/todominal.git")
 
