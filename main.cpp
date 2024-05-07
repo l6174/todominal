@@ -35,7 +35,6 @@ void removeLine(const string& filename, int lineNumberToRemove) {
                 outputFile << line << endl;
             }
             outputFile.close();
-            cout << "Line " << lineNumberToRemove << " removed from file: " << filename << endl;
         } else {
             cerr << "Unable to open output file: " << filename << endl;
         }
@@ -104,7 +103,6 @@ void replaceLine(const string& filename, int lineNumber, const string& newLine) 
 string strikethrough(const string& text) 
 {
     string result;
-
     result = "\e[9m" + text + "\e[m"; 
     return result;
 }
@@ -113,7 +111,7 @@ string strikethrough(const string& text)
 void removeTodo() {
     string toRemove;
     cout << "Enter Todo Index to Remove: ";
-    cin >> toRemove;
+    std::cin >> toRemove;
     int toRemoveint = stoi(toRemove);
     removeLine(mainFile, toRemoveint);
 }
@@ -122,96 +120,157 @@ void removeTodo() {
 void markDone() {
     string markInput;
     cout << "Enter Todo Index to Mark as Done: ";
-    cin >> markInput;
+    std::cin >> markInput;
     int markNum = stoi(markInput);
     replaceLine(mainFile, markNum, strikethrough(getLineContent(mainFile, markNum)));
 }
 
+void printTodo() {
+    // Display todos
+    int i = 1;
+    ifstream todos(mainFile);
+    if (todos.is_open()) {
+        string line;
+        while (getline(todos, line)) {
+        cout << i << ". " << line << endl;
+            i++;
+        }
+        todos.close();
+    }
+    else {
+        cerr << "Unable to open file\n";
+        exit(1);
+    }
+}
+
 // Function to add a new todo
-void addTodo() {
-    string newTodo;
-
-    // Get New Todo Input
-    cout << "Enter New Todo Name: ";
-    cin.ignore(); // Clear any remaining newline characters in the buffer
-    getline(cin, newTodo); // Read entire line including spaces
-
-    // Append it to Todo File
+void addTodo(string todoName) {
+    // Append Todo to File
     ofstream todoFile(mainFile, ios::app);
-    todoFile << newTodo << endl;
+    todoFile << todoName << endl;
     todoFile.close();
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     // Create Todo database file if does not exist
     system("mkdir -p $HOME/.config/todominal");
     system("touch $HOME/.config/todominal/todos.txt");
-    
-    // Input Variables
-    string userInput;
-    string otherInput;
-    string eraseConfirmation;
-    
-    // Main Loop
-    bool run = true;
-    while (run) {
-        int taskIndex = 1;
-        // Header
-        system("clear");
-        system("figlet TODOMINAL");
-        cout << "ToDo List in your Terminal!" << endl << endl;
-        system("echo Hey, $(whoami).");
-        
-        // Display todos
-        ifstream todos(mainFile);
-        if (todos.is_open()) {
-            string line;
-            while (getline(todos, line)) {
-                cout << taskIndex << ". " << line << endl;
-                taskIndex++;
-            }
-            todos.close();
-        } else {
-            cerr << "Unable to open file\n";
-            break;
-        }
-        
-        // User input
-        cout << "\n(A)dd Todo || (R)emove Todo || (M)ark Done || (O)ptions || (E)xit\n>> ";
-        cin >> userInput;
-
-        // Handle user input
-        if (userInput == "A" || userInput == "a") {
-            addTodo();
-        } else if (userInput == "R" || userInput == "r") {
-            removeTodo();
-        } else if (userInput == "M" || userInput == "m") {
-            markDone();
-        } else if (userInput == "O" || userInput == "o") {
-            cout << "1. Clear All Todo\n(E)xit\n>> ";
-            cin >> otherInput;
-            if (otherInput == "1")
+    int argNum = argc - 1; 
+    if (argNum > 0)
+    {
+        string firstArg;
+        string secondArg;
+        string helpBox = "Usage:\n   todominal add {Task Name (string)}\n   todominal remove {Task Index (int)}\n   todominal done {Task Index (int)}\n   todominal clearall\n   todominal list\n   todominal help\nExample:\n   todominal remove 2\n   todominal add \"Hello World!\"\n   todominal done 3\n";
+        if (argNum == 1)
+        {
+            firstArg = argv[1];
+            if (firstArg == "clearall")
             {
-                cout << "Are you sure? (Y/N): ";
-                std::cin >> eraseConfirmation;
-                if (eraseConfirmation == "y" || eraseConfirmation == "Y") {
-                    ofstream toErase(mainFile, ofstream::out | ofstream::trunc);
-                    toErase.close();
-                }
-                else {};
+                ofstream toErase(mainFile, ofstream::out | ofstream::trunc);
+                toErase.close();
             }
-            else if (otherInput == "E" || otherInput == "e"){} //Exit
+            else if (firstArg == "help")
+            {
+                cout << helpBox;
+            }
+            else if (firstArg == "list")
+            {
+                printTodo();
+            }
             else
             {
+                cout << helpBox;
+            }
+        }
+        else if (argNum == 2)
+        {
+            firstArg = argv[1];
+            secondArg = argv[2];
+            if (firstArg == "add")
+            {
+                addTodo(argv[2]);
+            }
+            else if (firstArg == "remove")
+            {
+                int lineIndex = stoi(argv[2]);
+                string Task = getLineContent(mainFile, lineIndex);
+                removeLine(mainFile, lineIndex); 
+            }
+            else if (firstArg == "done")
+            {
+                int lineIndex = stoi(argv[2]);
+                string Task = getLineContent(mainFile, lineIndex); 
+                replaceLine(mainFile, lineIndex, strikethrough(getLineContent(mainFile, lineIndex)));
+            }
+            else
+            {
+                cout << helpBox;
+            }
+            
+        }
+        else
+        {
+            cout << "Only 2 arguments are allowed!" << endl;
+        }
+    }
+    else
+    {
+        // Input Variables
+        string userInput;
+        string otherInput;
+        string eraseConfirmation;
+        
+        // Main Loop
+        bool run = true;
+        while (run) {
+            // Header
+            system("clear");
+            system("figlet TODOMINAL");
+            cout << "ToDo List in your Terminal!" << endl << endl;
+            system("echo Hey, $(whoami).");
+            
+            printTodo();
+            
+            // User input
+            cout << "\n(A)dd Todo || (R)emove Todo || (M)ark Done || (O)ptions || (E)xit\n>> ";
+            std::cin >> userInput;
+
+            // Handle user input
+            if (userInput == "A" || userInput == "a") {
+                string todoName;
+                cout << "Enter New Todo Name: ";
+                cin >> todoName;
+                addTodo(todoName);
+            } else if (userInput == "R" || userInput == "r") {
+                removeTodo();
+            } else if (userInput == "M" || userInput == "m") {
+                markDone();
+            } else if (userInput == "O" || userInput == "o") {
+                cout << "1. Clear All Todo\n(E)xit\n>> ";
+                std::cin >> otherInput;
+                if (otherInput == "1")
+                {
+                    cout << "Are you sure? (Y/N): ";
+                    std::cin >> eraseConfirmation;
+                    if (eraseConfirmation == "y" || eraseConfirmation == "Y") {
+                        ofstream toErase(mainFile, ofstream::out | ofstream::trunc);
+                        toErase.close();
+                    }
+                    else {};
+                }
+                else if (otherInput == "E" || otherInput == "e"){} //Exit
+                else
+                {
+                    cerr << "Enter a valid response!";
+                    this_thread::sleep_for(chrono::seconds(1));
+                }
+            } else if (userInput == "E" || userInput == "e") {
+                system("clear");
+                exit(0);
+            } else {
                 cerr << "Enter a valid response!";
                 this_thread::sleep_for(chrono::seconds(1));
             }
-        } else if (userInput == "E" || userInput == "e") {
-            system("clear");
-            exit(0);
-        } else {
-            cerr << "Enter a valid response!";
-            this_thread::sleep_for(chrono::seconds(1));
         }
     }
     return 0;

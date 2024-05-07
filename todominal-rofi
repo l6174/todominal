@@ -1,0 +1,47 @@
+#!/bin/bash
+
+file="$HOME/.config/todominal/rofi.txt"
+
+if [ ! -f "$file" ]; then
+    touch "$file"
+fi
+
+echo -en "\x00markup-rows\x1ftrue\n"
+
+function addTodo() {
+    todominal add "$*"
+}
+
+function markTodo() {
+    todominal done "$*"
+}
+
+function removeTodo() {
+    todominal remove "$*"
+}
+
+function printTodo() {
+    echo "$(todominal list)" | sed 's/\[9m/<s>/g; s/\[m/<\/s>/g'
+}
+
+if [ -z "$@" ]; then
+    printTodo
+elif [ "$@" == "Mark Done" ]; then
+    markTodo $(cat "$file")
+    printTodo
+elif [ "$@" == "Remove" ]; then
+    removeTodo $(cat "$file")
+    printTodo
+else
+    LINE=${@}
+    LINE_NUMBER=$(echo "${@}" | cut -c1)
+    echo $LINE_NUMBER > $file
+    if [[ $LINE == -* ]]; then
+        LINE=$(echo $LINE | sed s/^-//g |sed s/^\s-//g )
+        addTodo ${LINE}
+        printTodo
+    else
+        echo "Mark Done"
+        echo "Remove"
+    fi
+fi

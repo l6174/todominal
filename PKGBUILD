@@ -1,7 +1,7 @@
 # Maintainer: l6174 <l6174@proton.me>
 
 pkgname=todominal
-pkgver=1.0
+pkgver=2.0
 pkgrel=1
 pkgdesc="A todo list application for the terminal"
 arch=('any')
@@ -22,6 +22,7 @@ package() {
   
   # Install application binary
   install -Dm755 todominal "$pkgdir/usr/bin/todominal"
+  install -Dm755 todominal-rofi "$pkgdir/usr/bin/todominal-rofi"
   
   # Install license file
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
