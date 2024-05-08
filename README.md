@@ -4,9 +4,9 @@ Minimal todo list for terminal and rofi.
 > This is my first project made using C++ and I am also very stupid when it comes to coding so the code is very messy and inefficient *(IT WORKS)*. Feel free to open a pull request for improvements.
 ## Preview
 ### Interactive CLI:
-![](assets/preview.png)
+![](img/preview.png)
 ### Rofi:
-![](assets/preview_rofi.png)
+![](img/preview_rofi.png)
 
 ## Dependencies
 1. ```figlet```
