@@ -25,7 +25,7 @@ $ makepkg -si
 ```
 $ git clone https://github.com/l6174/todominal.git
 $ cd todominal
-$ g++ main.cpp -o bin/todominal
+$ g++ src/main.cpp -o bin/todominal
 ```
 Then copy ```bin/todominal``` and ```bin/todominal_rofi``` to your ```$PATH```.
 
