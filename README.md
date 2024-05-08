@@ -4,9 +4,9 @@ Minimal todo list for terminal and rofi.
 > This is my first project made using C++ and I am also very stupid when it comes to coding so the code is very messy and inefficient *(IT WORKS)*. Feel free to open a pull request for improvements.
 ## Preview
 ### Interactive CLI:
-![](preview.png)
+![](assets/preview.png)
 ### Rofi:
-![](preview_rofi.png)
+![](assets/preview_rofi.png)
 
 ## Dependencies
 1. ```figlet```
@@ -25,9 +25,9 @@ $ makepkg -si
 ```
 $ git clone https://github.com/l6174/todominal.git
 $ cd todominal
-$ g++ main.cpp -o todominal
+$ g++ main.cpp -o bin/todominal
 ```
-Then copy ```todominal``` and ```todominal_rofi``` to your ```$PATH```.
+Then copy ```bin/todominal``` and ```bin/todominal_rofi``` to your ```$PATH```.
 
 ## Usage
 ### CLI
