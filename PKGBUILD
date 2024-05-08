@@ -10,7 +10,7 @@ OPTIONS=(strip !debug)
 license=('GPL')
 depends=('figlet' 'sed')
 makedepends=('gcc')
-optdepends=(rofi: rofi support)
+optdepends=('rofi: rofi support')
 
 source=("git+https://github.com/l6174/todominal.git")
 
