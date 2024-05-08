@@ -245,6 +245,7 @@ int main(int argc, char* argv[]) {
             if (userInput == "A" || userInput == "a") {
                 string todoName;
                 cout << "Enter New Todo Name: ";
+                cin.ignore();
                 getline(cin, todoName);
                 addTodo(todoName);
             } else if (userInput == "R" || userInput == "r") {
