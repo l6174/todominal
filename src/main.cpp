@@ -125,6 +125,7 @@ void markDone() {
     replaceLine(mainFile, markNum, strikethrough(getLineContent(mainFile, markNum)));
 }
 
+// Function to print indexed contents of a file
 void printTodo() {
     // Display todos
     int i = 1;
@@ -155,11 +156,15 @@ int main(int argc, char* argv[]) {
     // Create Todo database file if does not exist
     system("mkdir -p $HOME/.config/todominal");
     system("touch $HOME/.config/todominal/todos.txt");
-    int argNum = argc - 1; 
+    int argNum = argc - 1; // To avoid confusion
+
+    // If 1 or more arguments are passed (CLI Mode)
     if (argNum > 0)
     {
+        // Store arguments in variables
         string firstArg;
         string secondArg;
+        // Usage (Help Box)
         string helpBox = "Usage:\n   todominal add {Task Name (string)}\n   todominal remove {Task Index (int)}\n   todominal done {Task Index (int)}\n   todominal clearall\n   todominal list\n   todominal help\nExample:\n   todominal remove 2\n   todominal add \"Hello World!\"\n   todominal done 3\n";
         if (argNum == 1)
         {
@@ -213,6 +218,7 @@ int main(int argc, char* argv[]) {
             cout << "Only 2 arguments are allowed!" << endl;
         }
     }
+    // If no arguments are passed (Interactive CLI Mode)
     else
     {
         // Input Variables
@@ -239,7 +245,7 @@ int main(int argc, char* argv[]) {
             if (userInput == "A" || userInput == "a") {
                 string todoName;
                 cout << "Enter New Todo Name: ";
-                cin >> todoName;
+                getline(cin, todoName);
                 addTodo(todoName);
             } else if (userInput == "R" || userInput == "r") {
                 removeTodo();
