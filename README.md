@@ -30,6 +30,11 @@ $ g++ src/main.cpp -o bin/todominal
 Then copy ```bin/todominal``` and ```bin/todominal_rofi``` to your ```$PATH```.
 
 ## Usage
+### Interactive CLI
+```
+$ todominal
+```
+![](img/preview.png)
 ### CLI
 ```
 $ todominal help
@@ -45,6 +50,8 @@ Example:
    todominal add "Hello World!"
    todominal done 3
 ```
+> [!Tip]
+> Add ```todominal list``` to your ```.bash_profile``` or ```config.fish``` to list all your tasks when you launch terminal.
 ### Rofi
 Bind this command to any key preferred.
 ```
