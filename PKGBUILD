@@ -1,8 +1,8 @@
 # Maintainer: l6174 <l6174@proton.me>
 
 pkgname=todominal
-pkgver=2.2
-pkgrel=3
+pkgver=3.2
+pkgrel=1
 pkgdesc="A todo list application for the terminal and rofi"
 arch=('any')
 url="https://github.com/l6174/todominal"
