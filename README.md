@@ -63,9 +63,10 @@ rofi -modi todo:todominal-rofi -show todo -theme <theme file location>
 ```
 **Add Task**:
 
-Enter your task name after a *hyphen* (```-```) in the rofi input field.
+Enter your task name after a *hyphen* (```-```) followed by priorty (l/m/h) in parentheses (x) in the rofi input field.
 
 Example: ```- Example Task```
+Example: ```- Example Task (m)```
 
 **Mark As Done**:
 

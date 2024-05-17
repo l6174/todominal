@@ -13,10 +13,10 @@ const string userHome = getenv("HOME");
 const string mainFile = userHome + "/.config/todominal/todos.txt";
 
 // Define colors for priorities
-const string RED = "\033[1;31m";
-const string YELLOW = "\033[1;33m";
-const string GREEN = "\033[1;32m";
-const string RESET = "\033[0m";
+string RED = "\033[1;31m";
+string YELLOW = "\033[1;33m";
+string GREEN = "\033[1;32m";
+string RESET = "\033[0m";
 
 // Function to remove a line from a specific line from a file
 void removeLine(const string& filename, int lineNumberToRemove) {
@@ -153,11 +153,11 @@ void printTodo() {
         string line;
         while (getline(todos, line)) {
             string color;
-            if (line.find("[h]") != string::npos) {
+            if (line.find("(h)") != string::npos) {
                 color = RED;
-            } else if (line.find("[m]") != string::npos) {
+            } else if (line.find("(m)") != string::npos) {
                 color = YELLOW;
-            } else if (line.find("[l]") != string::npos) {
+            } else if (line.find("(l)") != string::npos) {
                 color = GREEN;
             } else {
                 color = RESET;
@@ -172,8 +172,43 @@ void printTodo() {
     }
 }
 
+void printTodoRofi() {
+    RED = "<span foreground=\"#f38ba8\">";
+    YELLOW = "<span foreground=\"#f9e2af\">";
+    GREEN = "<span foreground=\"#a6e3a1\">";
+    RESET = "</span>";
+    int i = 1;
+    ifstream todos(mainFile);
+    if (todos.is_open()) {
+        string line;
+        while (getline(todos, line)) {
+            string color;
+            if (line.find("(h)") != string::npos) {
+                color = RED;
+            } else if (line.find("(m)") != string::npos) {
+                color = YELLOW;
+            } else if (line.find("(l)") != string::npos) {
+                color = GREEN;
+            } else {
+                color = "<span>";
+            }
+            cout << i << ". " << color << line << RESET << endl;
+            i++;
+        }
+        todos.close();
+    } else {
+        cerr << "Unable to open file\n";
+        exit(1);
+    }
+}
 
 // Function to add a new todo
+void addTodoCli(string toAdded) {
+    ofstream todoFile(mainFile, ios::app);
+    todoFile << toAdded << endl;
+    todoFile.close();
+}
+
 void addTodo() {
     string todoName, priority;
     cout << "Enter New Todo Name: ";
@@ -181,12 +216,19 @@ void addTodo() {
     getline(cin, todoName);
     cout << "Enter Priority (High, Medium, Low): ";
     getline(cin, priority);
-    char priorityChar = tolower(priority[0]);
+    if (priority.empty())
+    {
+        todoName = todoName;
+    }
+    else
+    {
+        char priorityChar = tolower(priority[0]);
+        todoName = todoName + " (" + priorityChar + ")";
+    }
     ofstream todoFile(mainFile, ios::app);
-    todoFile << todoName << " [" << priorityChar << "]" << endl;
+    todoFile << todoName << endl;
     todoFile.close();
 }
-
 
 int main(int argc, char* argv[]) {
     // Create Todo database file if does not exist
@@ -218,6 +260,10 @@ int main(int argc, char* argv[]) {
             {
                 printTodo();
             }
+            else if (firstArg == "list-rofi")
+            {
+                printTodoRofi();
+            }
             else
             {
                 cout << helpBox;
@@ -229,7 +275,7 @@ int main(int argc, char* argv[]) {
             secondArg = argv[2];
             if (firstArg == "add")
             {
-                addTodo();
+                addTodoCli(secondArg);
             }
             else if (firstArg == "remove")
             {
